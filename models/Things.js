@@ -13,4 +13,4 @@ const thingSchema = mongoose.Schema({
     usersDisliked: { type: [String], required: true},
 });
 
-module.exports = mongoos.model('Thing', thingSchema);
+module.exports = mongoose.model('Thing', thingSchema);

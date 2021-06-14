@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+const stuffRoutes = require('./routes/stuff');
+const userRoutes = require('./routes/user');
+
 mongoose.connect('mongodb+srv://BalGrymos:xectvw493sHoRSr2@cluster0.4qetd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -19,24 +22,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-
-app.use((req, res, next) => {
-    console.log('requête reçue!');
-    next();
-});
-
-app.use((req, res, next) => {
-    res.status(201);
-    next();
-});
-
-app.use((req, res, next) => {
-    res.json({ message: 'Votre Requête a bien été reçu !'});
-    next();
-});
-
-app.use((req, res) => {
-    console.log('réponse envoyée avec succès')
-});
+app.use('/api/auth', userRoutes);
+app.use('/api/stuff', stuffRoutes);
 
 module.exports = app;
