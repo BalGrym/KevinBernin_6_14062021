@@ -8,6 +8,9 @@ const multer = require('../middleware/multer-config');
 
 router.post('/', auth, multer, saucesCtrl.createThing);  
 router.get('/', auth, saucesCtrl.getAllThings);
+router.post('/:id', auth, saucesCtrl.getOneThing);
+router.put('/:id', auth, saucesCtrl.modifyThing);
+router.delete('/:id', auth, saucesCtrl.deleteThing);
   
 
 module.exports = router;
