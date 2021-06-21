@@ -11,6 +11,7 @@ exports.createSauce = (req, res, next) => {
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   });
+  console.log(req.file.filename);
   sauce.save()
     .then(() => status(201).json({ message: 'Objet enregistré !'}))
     .catch(error => res.status(400).json({ error }));
