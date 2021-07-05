@@ -1,19 +1,9 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const passwordValidator = require('password-validator');
-
-const schema = new passwordValidator();
-schema.is().min(8)                                   
-.is().max(100)                               
-.has().uppercase()                             
-.has().lowercase()                              
-.has().digits(1)                              
-.has().not().spaces();
 
 exports.signup = (req, res, next) => {
-  if(schema.validate(req.body.password)){
-    bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
           email: req.body.email,
@@ -23,10 +13,6 @@ exports.signup = (req, res, next) => {
           .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
           .catch(error => res.status(400).json({ error }));
       })
-      .catch(error => res.status(500).json({ error }));
-  } else {
-    return res.status(400).json({ message: `Le mot de passe doit être composé de 8 characters minimum, minimum 1 majuscule, minuscule et nombre et ne doit pas contenir d'espace`})
-  }
 };
 
 exports.login = (req, res, next) => {
