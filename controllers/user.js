@@ -1,22 +1,27 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const sha256 = require('js-sha256');
 
 exports.signup = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
+  const emailHash = sha256.create(req.body.email)
+    bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
-          email: req.body.email,
+          email: emailHash,
           password: hash
         });
         user.save()
           .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
           .catch(error => res.status(400).json({ error }));
       })
+  
+  
 };
 
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+  const emailHash = sha256.create(req.body.email)
+    User.findOne({ email: emailHash })
       .then(user => {
         if (!user) {
           return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -38,4 +43,5 @@ exports.login = (req, res, next) => {
           .catch(error => res.status(500).json({ error }));
       })
       .catch(error => res.status(500).json({ error }));
+ 
   };
